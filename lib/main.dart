@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'core/constants/app_colors.dart';
 import 'home_page.dart';
 
 void main() {
-               runApp(const PortfolioApp());
+  runApp(const PortfolioApp());
 }
 
 class PortfolioApp extends StatelessWidget {
@@ -27,6 +28,7 @@ class PortfolioApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const HomePage(),
+      //////////
     );
   }
 }
