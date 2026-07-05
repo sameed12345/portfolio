@@ -222,7 +222,7 @@ class FooterSection extends StatelessWidget {
     final items = [
       (Icons.phone_rounded, AppStrings.phone, 'tel:${AppStrings.phone}'),
       (Icons.email_rounded, AppStrings.email, 'mailto:${AppStrings.email}'),
-      (Icons.location_on_rounded, 'Multan, Pakistan', null),
+      (Icons.location_on_rounded, 'Lahore, Pakistan', null),
       (Icons.access_time_rounded, 'Available Mon–Sat', null),
     ];
 

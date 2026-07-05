@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:video_player/video_player.dart';
@@ -293,11 +295,21 @@ class _DemoModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = Responsive.isMobile(context);
+    final size = MediaQuery.of(context).size;
+
+    // Responsive dialog bounds
+    final double dialogWidth = isMobile ? size.width * 0.92 : 850;
+    final double dialogHeight = isMobile ? size.height * 0.85 : 550;
+
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.all(20),
+      insetPadding: EdgeInsets.all(isMobile ? 12 : 20),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 700, maxHeight: 560),
+        constraints: BoxConstraints(
+          maxWidth: dialogWidth,
+          maxHeight: dialogHeight,
+        ),
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.bgCard,
@@ -310,139 +322,201 @@ class _DemoModal extends StatelessWidget {
               ),
             ],
           ),
+          clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
               // Header
-              Padding(
-                padding: const EdgeInsets.fromLTRB(24, 20, 16, 0),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: project.accentColor.withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(Icons.play_circle_rounded,
-                          color: project.accentColor, size: 20),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(project.title, style: AppTextStyles.titleLarge),
-                          Text('Demo Preview',
-                              style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.textMuted, fontSize: 12)),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close_rounded,
-                          color: AppColors.textSecondary),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              // Video placeholder
+              _buildHeader(context),
+              // Content
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: _VideoPlayerWidget(
-                      path: project.videoPath,
-                    ),
-                  ),
-                ),
-              ),
-              // Expanded(
-              //   child: Padding(
-              //     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              //     child: Container(
-              //       decoration: BoxDecoration(
-              //         color: AppColors.bgPrimary,
-              //         borderRadius: BorderRadius.circular(16),
-              //         border: Border.all(color: AppColors.border),
-              //       ),
-              //       child: Center(
-              //         child: Column(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             Container(
-              //               width: 80,
-              //               height: 80,
-              //               decoration: BoxDecoration(
-              //                 shape: BoxShape.circle,
-              //                 gradient: LinearGradient(colors: [
-              //                   project.accentColor,
-              //                   project.accentColor.withOpacity(0.6),
-              //                 ]),
-              //               ),
-              //               child: const Icon(Icons.play_arrow_rounded,
-              //                   color: Colors.white, size: 44),
-              //             ),
-              //             const SizedBox(height: 20),
-              //             Text('Demo Video Coming Soon',
-              //                 style: AppTextStyles.titleMedium),
-              //             const SizedBox(height: 8),
-              //             Text(
-              //               'Upload your screen recording to assets/videos/',
-              //               style: AppTextStyles.bodyMedium.copyWith(
-              //                   color: AppColors.textMuted, fontSize: 13),
-              //               textAlign: TextAlign.center,
-              //             ),
-              //             const SizedBox(height: 24),
-              //             Wrap(
-              //               spacing: 8,
-              //               runSpacing: 8,
-              //               alignment: WrapAlignment.center,
-              //               children: project.technologies
-              //                   .map((t) => Container(
-              //                         padding: const EdgeInsets.symmetric(
-              //                             horizontal: 12, vertical: 6),
-              //                         decoration: BoxDecoration(
-              //                           color: project.accentColor
-              //                               .withOpacity(0.12),
-              //                           borderRadius: BorderRadius.circular(6),
-              //                           border: Border.all(
-              //                               color: project.accentColor
-              //                                   .withOpacity(0.3)),
-              //                         ),
-              //                         child: Text(t,
-              //                             style:
-              //                                 AppTextStyles.bodyMedium.copyWith(
-              //                               color: project.accentColor,
-              //                               fontSize: 12,
-              //                             )),
-              //                       ))
-              //                   .toList(),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // Description
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  project.description,
-                  style: AppTextStyles.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
+                child: isMobile
+                    ? _buildMobileContent(context)
+                    : _buildDesktopContent(context),
               ),
             ],
           ),
-        )
-            .animate()
-            .fadeIn(duration: 300.ms)
-            .scale(begin: const Offset(0.9, 0.9), end: const Offset(1, 1)),
+        ),
+      ),
+    ).animate().fadeIn(duration: 300.ms).scale(
+          begin: const Offset(0.95, 0.95),
+          end: const Offset(1, 1),
+          curve: Curves.easeOutBack,
+        );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 20, 16, 12),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: project.accentColor.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.play_circle_rounded,
+              color: project.accentColor,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(project.title, style: AppTextStyles.titleLarge),
+                Text(
+                  'Demo Preview',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.textMuted,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.close_rounded,
+              color: AppColors.textSecondary,
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMobileContent(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Responsive video container constraint
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.42,
+              ),
+              child: _VideoPlayerWidget(
+                path: project.videoPath,
+                accentColor: project.accentColor,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          // Technologies
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            alignment: WrapAlignment.center,
+            children: project.technologies
+                .map((t) => Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: project.accentColor.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: project.accentColor.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Text(
+                        t,
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: project.accentColor,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ))
+                .toList(),
+          ),
+          const SizedBox(height: 16),
+          // Description
+          Text(
+            project.description,
+            style: AppTextStyles.bodyMedium.copyWith(height: 1.5),
+            textAlign: TextAlign.justify,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopContent(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Video Player Column
+          Expanded(
+            flex: 2,
+            child: Center(
+              child: _VideoPlayerWidget(
+                path: project.videoPath,
+                accentColor: project.accentColor,
+              ),
+            ),
+          ),
+          const SizedBox(width: 24),
+          // Details Column
+          Expanded(
+            flex: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Technologies
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: project.technologies
+                      .map((t) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: project.accentColor.withOpacity(0.12),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: project.accentColor.withOpacity(0.3),
+                              ),
+                            ),
+                            child: Text(
+                              t,
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: project.accentColor,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
+                const SizedBox(height: 20),
+                // Description (scrollable text area)
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Text(
+                      project.description,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        height: 1.6,
+                        fontSize: 14,
+                      ),
+                      textAlign: TextAlign.justify,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -451,9 +525,11 @@ class _DemoModal extends StatelessWidget {
 /////////////////////////////////////////////
 class _VideoPlayerWidget extends StatefulWidget {
   final String path;
+  final Color accentColor;
 
   const _VideoPlayerWidget({
     required this.path,
+    required this.accentColor,
   });
 
   @override
@@ -462,6 +538,8 @@ class _VideoPlayerWidget extends StatefulWidget {
 
 class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
   late VideoPlayerController _controller;
+  bool _showControls = true;
+  Timer? _hideTimer;
 
   @override
   void initState() {
@@ -474,15 +552,77 @@ class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
           const Duration(milliseconds: 300),
           () => _controller.play(),
         );
-        // _controller.play();
         _controller.setLooping(true);
       });
+
+    _controller.addListener(_videoListener);
+    _startHideTimer();
+  }
+
+  void _videoListener() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
   void dispose() {
+    _controller.removeListener(_videoListener);
     _controller.dispose();
+    _hideTimer?.cancel();
     super.dispose();
+  }
+
+  void _startHideTimer() {
+    _hideTimer?.cancel();
+    if (_controller.value.isPlaying) {
+      _hideTimer = Timer(const Duration(milliseconds: 2500), () {
+        if (mounted && _controller.value.isPlaying) {
+          setState(() {
+            _showControls = false;
+          });
+        }
+      });
+    }
+  }
+
+  void _toggleControlsVisibility() {
+    setState(() {
+      _showControls = !_showControls;
+      if (_showControls) {
+        _startHideTimer();
+      }
+    });
+  }
+
+  void _togglePlay() {
+    setState(() {
+      if (_controller.value.isPlaying) {
+        _controller.pause();
+        _showControls = true;
+        _hideTimer?.cancel();
+      } else {
+        _controller.play();
+        _startHideTimer();
+      }
+    });
+  }
+
+  void _toggleMute() {
+    setState(() {
+      if (_controller.value.volume == 0) {
+        _controller.setVolume(1.0);
+      } else {
+        _controller.setVolume(0.0);
+      }
+    });
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$minutes:$seconds';
   }
 
   @override
@@ -493,18 +633,147 @@ class _VideoPlayerWidgetState extends State<_VideoPlayerWidget> {
       );
     }
 
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        AspectRatio(
-          aspectRatio: _controller.value.aspectRatio,
-          child: VideoPlayer(_controller),
-        ),
-        VideoProgressIndicator(
-          _controller,
-          allowScrubbing: true,
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool showControlsBar = constraints.maxWidth >= 220;
+
+        return MouseRegion(
+          onHover: (_) {
+            if (!_showControls) {
+              setState(() {
+                _showControls = true;
+              });
+            }
+            _startHideTimer();
+          },
+          child: AspectRatio(
+            aspectRatio: _controller.value.aspectRatio,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.border, width: 1.5),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: _toggleControlsVisibility,
+                      child: VideoPlayer(_controller),
+                    ),
+                    // Dark tint when controls are shown
+                    IgnorePointer(
+                      ignoring: true,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        color:
+                            _showControls ? Colors.black38 : Colors.transparent,
+                      ),
+                    ),
+                    // Center play/pause overlay
+                    AnimatedOpacity(
+                      opacity: _showControls ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 200),
+                      child: IgnorePointer(
+                        ignoring: !_showControls,
+                        child: IconButton(
+                          icon: Icon(
+                            _controller.value.isPlaying
+                                ? Icons.pause_circle_filled_rounded
+                                : Icons.play_circle_filled_rounded,
+                            size: constraints.maxWidth < 180 ? 48 : 64,
+                            color: Colors.white.withOpacity(0.9),
+                          ),
+                          onPressed: _togglePlay,
+                        ),
+                      ),
+                    ),
+                    // Bottom control panel bar (above progress indicator)
+                    if (showControlsBar)
+                      Positioned(
+                        bottom: 6,
+                        left: 0,
+                        right: 0,
+                        child: AnimatedOpacity(
+                          opacity: _showControls ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 200),
+                          child: IgnorePointer(
+                            ignoring: !_showControls,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                //horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.black87,
+                                    Colors.black45,
+                                    Colors.transparent,
+                                  ],
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      _controller.value.isPlaying
+                                          ? Icons.pause_rounded
+                                          : Icons.play_arrow_rounded,
+                                    ),
+                                    color: Colors.white,
+                                    iconSize: 20,
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    onPressed: _togglePlay,
+                                  ),
+                                  // const SizedBox(width: 8),
+                                  Text(
+                                    '${_formatDuration(_controller.value.position)} / ${_formatDuration(_controller.value.duration)}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  // const Spacer(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    // Video Progress Indicator (placed at the absolute bottom edge, always visible & interactive)
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: VideoProgressIndicator(
+                        _controller,
+                        allowScrubbing: true,
+                        colors: VideoProgressColors(
+                          playedColor: widget.accentColor,
+                          bufferedColor: Colors.white24,
+                          backgroundColor: Colors.white12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -536,14 +805,6 @@ class _HexPainter extends CustomPainter {
   }
 
   void _drawHex(Canvas canvas, Paint paint, Offset center, double r) {
-    final path = Path();
-    for (int i = 0; i < 6; i++) {
-      final angle = (i * 60 - 30) * 3.14159 / 180;
-      final x = center.dx + r * 0.6 * (angle == 0 ? 1 : (i == 0 ? 1 : 0.866));
-      if (i == 0) {
-        path.moveTo(center.dx + r * 0.6 * 1, center.dy);
-      }
-    }
     // Simple circle fallback for hex pattern
     canvas.drawCircle(center, r * 0.5, paint);
   }

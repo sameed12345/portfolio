@@ -223,7 +223,7 @@ class AboutSection extends StatelessWidget {
     final isMobile = Responsive.isMobile(context);
     final stats = [
       (2, '+', 'Years Experience'),
-      (15, '+', 'Projects\nCompleted'),
+      (8, '+', 'Projects\nCompleted'),
       (6, '+', 'Technologies'),
       (100, '%', 'Client Satisfaction'),
     ];
