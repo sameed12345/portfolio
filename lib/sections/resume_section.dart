@@ -197,7 +197,7 @@ class _ResumeSectionState extends State<ResumeSection> {
   List<Widget> _buildHighlights() {
     final items = [
       (Icons.work_rounded, '2+', 'Years Experience'),
-      (Icons.apps_rounded, '8+', 'Projects Done'),
+      (Icons.apps_rounded, '3+', 'Projects Done'),
       (Icons.star_rounded, '100%', 'Satisfaction'),
     ];
     return items
