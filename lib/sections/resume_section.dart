@@ -177,14 +177,14 @@ class _ResumeSectionState extends State<ResumeSection> {
                   ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.3, end: 0),
 
                   const SizedBox(height: 16),
-
-                  Text(
-                    'PDF Format • Updated May 2025',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textMuted,
-                      fontSize: 12,
-                    ),
-                  ).animate().fadeIn(delay: 700.ms),
+                  //
+                  // Text(
+                  //   'PDF Format • Updated May 2025',
+                  //   style: AppTextStyles.bodyMedium.copyWith(
+                  //     color: AppColors.textMuted,
+                  //     fontSize: 12,
+                  //   ),
+                  // ).animate().fadeIn(delay: 700.ms),
                 ],
               ),
             ),

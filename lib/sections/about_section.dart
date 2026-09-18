@@ -70,90 +70,10 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  // Widget _buildImageCard() {
-  //   return Container(
-  //     height: 420,
-  //     decoration: BoxDecoration(
-  //       gradient: AppColors.cardGradient,
-  //       borderRadius: BorderRadius.circular(24),
-  //       border: Border.all(color: AppColors.border),
-  //     ),
-  //     child: Stack(
-  //       children: [
-  //         Positioned.fill(
-  //           child: ClipRRect(
-  //             borderRadius: BorderRadius.circular(24),
-  //             child: CustomPaint(painter: _DotPatternPainter()),
-  //           ),
-  //         ),
-  //         Center(
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [
-  //               Container(
-  //                 width: 140,
-  //                 height: 140,
-  //                 decoration: const BoxDecoration(
-  //                   shape: BoxShape.circle,
-  //                   gradient: AppColors.accentGradient,
-  //                 ),
-  //                 child: const Center(
-  //                   child:
-  //                       Icon(Icons.flutter_dash, size: 72, color: Colors.white),
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 24),
-  //               ShaderMask(
-  //                 shaderCallback: (b) =>
-  //                     AppColors.accentGradient.createShader(b),
-  //                 blendMode: BlendMode.srcIn,
-  //                 child: Text('Flutter Developer',
-  //                     style: AppTextStyles.headlineMedium),
-  //               ),
-  //               const SizedBox(height: 8),
-  //               Text('2+ Years of Excellence', style: AppTextStyles.bodyMedium),
-  //               const SizedBox(height: 24),
-  //               Wrap(
-  //                 spacing: 8,
-  //                 runSpacing: 8,
-  //                 alignment: WrapAlignment.center,
-  //                 children: ['Flutter', 'Firebase', 'Dart', 'Supabase']
-  //                     .map((t) => Container(
-  //                           padding: const EdgeInsets.symmetric(
-  //                               horizontal: 12, vertical: 6),
-  //                           decoration: BoxDecoration(
-  //                             color: AppColors.accent.withOpacity(0.15),
-  //                             borderRadius: BorderRadius.circular(50),
-  //                             border: Border.all(
-  //                                 color: AppColors.accent.withOpacity(0.3)),
-  //                           ),
-  //                           child: Text(t,
-  //                               style: AppTextStyles.bodyMedium.copyWith(
-  //                                   color: AppColors.accent, fontSize: 12)),
-  //                         ))
-  //                     .toList(),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   )
-  //       .animate()
-  //       .fadeIn(delay: 200.ms, duration: 700.ms)
-  //       .slideX(begin: -0.3, end: 0);
-  // }
-
   Widget _buildTextContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text('Building Digital Experiences\nThat Matter',
-        //         style: AppTextStyles.headlineLarge.copyWith(height: 1.3))
-        //     .animate()
-        //     .fadeIn(delay: 300.ms, duration: 600.ms)
-        //     .slideX(begin: 0.3, end: 0),
-        // const SizedBox(height: 20),
         Text(AppStrings.aboutBio, style: AppTextStyles.bodyLarge)
             .animate()
             .fadeIn(delay: 400.ms, duration: 600.ms)
@@ -169,61 +89,15 @@ class AboutSection extends StatelessWidget {
             .fadeIn(delay: 500.ms, duration: 600.ms)
             .slideX(begin: 0.3, end: 0),
         const SizedBox(height: 32),
-        //         ...[
-        //   (
-        //     '🚀',
-        //     'Performance-First',
-        //     'Optimized apps with smooth 60fps animations'
-        //   ),
-        //   ('🎨', 'Design Oriented', 'Pixel-perfect UI from Figma designs'),
-        //   (
-        //     '🔧',
-        //     'Clean Architecture',
-        //     'Scalable code with BLoC, Riverpod & SOLID'
-        //   ),
-        // ].asMap().entries.map(
-        //     (e) => _buildHighlight(e.value.$1, e.value.$2, e.value.$3, e.key)),
       ],
     );
   }
-
-  // Widget _buildHighlight(String emoji, String title, String desc, int index) {
-  //   return Container(
-  //     margin: const EdgeInsets.only(bottom: 16),
-  //     padding: const EdgeInsets.all(16),
-  //     decoration: BoxDecoration(
-  //       color: AppColors.bgGlass,
-  //       borderRadius: BorderRadius.circular(12),
-  //       border: Border.all(color: AppColors.border),
-  //     ),
-  //     child: Row(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         //  Text(emoji, style: const TextStyle(fontSize: 24)),
-  //         const SizedBox(width: 14),
-  //         // Expanded(
-  //         //   child: Column(
-  //         //     crossAxisAlignment: CrossAxisAlignment.start,
-  //         //     children: [
-  //         //       Text(title, style: AppTextStyles.titleMedium),
-  //         //       const SizedBox(height: 4),
-  //         //       Text(desc, style: AppTextStyles.bodyMedium),
-  //         //     ],
-  //         //   ),
-  //         // ),
-  //       ],
-  //     ),
-  //   )
-  //       .animate()
-  //       .fadeIn(delay: (600 + index * 120).ms, duration: 500.ms)
-  //       .slideX(begin: 0.2, end: 0);
-  // }
 
   Widget _buildStatsRow(BuildContext context) {
     final isMobile = Responsive.isMobile(context);
     final stats = [
       (2, '+', 'Years Experience'),
-      (8, '+', 'Projects\nCompleted'),
+      (3, '+', 'Projects\nCompleted'),
       (6, '+', 'Technologies'),
       (100, '%', 'Client Satisfaction'),
     ];

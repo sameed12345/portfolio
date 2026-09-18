@@ -350,9 +350,10 @@ class _HeroSectionState extends State<HeroSection>
         children: [
           // Outer glow ring
           Container(
-            width: 280,
-            height: 280,
-            decoration: BoxDecoration(
+            //width: 280,
+            width: 320,
+            height: 320,
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               gradient: AppColors.accentGradient,
             ),
@@ -364,8 +365,9 @@ class _HeroSectionState extends State<HeroSection>
 
           // Inner background
           Container(
-            width: 268,
-            height: 268,
+            // width: 268,
+            width: 318,
+            height: 318,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.bgPrimary,
@@ -374,8 +376,9 @@ class _HeroSectionState extends State<HeroSection>
 
           // Avatar circle
           Container(
-            width: 256,
-            height: 256,
+            // width: 256,
+            width: 310,
+            height: 310,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: AppColors.cardGradient,
@@ -397,59 +400,9 @@ class _HeroSectionState extends State<HeroSection>
                   'assets/images/sam.jpeg',
                   fit: BoxFit.cover,
                 ),
-                // child: Column(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     // ShaderMask(
-                //     //   shaderCallback: (b) =>
-                //     //       AppColors.accentGradient.createShader(b),
-                //     //   blendMode: BlendMode.srcIn,
-                //     //   child: const Icon(Icons.person_rounded, size: 100),
-                //     // ),
-                //     // const SizedBox(height: 8),
-                //     // ShaderMask(
-                //     //   shaderCallback: (b) =>
-                //     //       AppColors.accentGradient.createShader(b),
-                //     //   blendMode: BlendMode.srcIn,
-                //     //   child: Text(
-                //     //     'S.H',
-                //     //     style: AppTextStyles.displaySmall.copyWith(
-                //     //       fontWeight: FontWeight.w800,
-                //     //     ),
-                //     //   ),
-                //     // ),
-                //   ],
-                // ),
               ),
             ),
           ),
-
-          // Floating badge
-          // Positioned(
-          //   bottom: 10,
-          //   right: 10,
-          //   child: Container(
-          //     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          //     decoration: BoxDecoration(
-          //       gradient: AppColors.accentGradient,
-          //       borderRadius: BorderRadius.circular(50),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: AppColors.accent.withOpacity(0.5),
-          //           blurRadius: 16,
-          //           offset: const Offset(0, 4),
-          //         ),
-          //       ],
-          //     ),
-          //     child: Text(
-          //       '2+ Years Exp',
-          //       style: AppTextStyles.labelLarge.copyWith(
-          //         color: Colors.white,
-          //         fontSize: 11,
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     )
